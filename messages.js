@@ -65,7 +65,7 @@
 
     grid.innerHTML = list.map(function(m, i){
       var initials = U.getInitials ? U.getInitials(m.name) : m.name.charAt(0);
-      var color = U.colorForName ? U.colorForName(m.name) : '#B08D57';
+      var color = U.colorForName ? U.colorForName(m.name) : '#641B31';
       var dateLabel = U.formatDate ? U.formatDate(m.date) : '';
       var delay = reduced ? '0ms' : Math.min(i * 55, 440) + 'ms';
       return '<div class="msg-card" style="animation-delay:' + delay + '">' +

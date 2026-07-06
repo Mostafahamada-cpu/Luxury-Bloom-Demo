@@ -20,9 +20,12 @@
      ===================================================== */
 
   function placeholderArt(seed, caption){
+    // Kept in sync by hand with style.css's :root tokens — inline SVG data
+    // URIs can't read CSS variables, so if the palette changes again,
+    // update these six pairs (and the two fill colors below) to match.
     var pairs = [
-      ['#F1E7DA', '#E6B6AE'], ['#E6B6AE', '#D9C098'], ['#D9C098', '#F1D6D0'],
-      ['#F1D6D0', '#C6867C'], ['#C6867C', '#B08D57'], ['#B08D57', '#F1E7DA']
+      ['#F6E8EA', '#E8CDD2'], ['#E8CDD2', '#A23F55'], ['#A23F55', '#F2E1E3'],
+      ['#F2E1E3', '#8A2540'], ['#8A2540', '#641B31'], ['#641B31', '#F6E8EA']
     ];
     var pair = pairs[seed % pairs.length];
     var h = 640 + (seed % 4) * 110; // varied aspect ratio for a livelier masonry
@@ -34,9 +37,9 @@
           '<stop offset="1" stop-color="' + pair[1] + '"/>' +
         '</linearGradient></defs>' +
         '<rect width="100%" height="100%" fill="url(#g' + seed + ')"/>' +
-        '<circle cx="50%" cy="42%" r="46" fill="none" stroke="#2A2321" stroke-opacity=".18" stroke-width="1.4"/>' +
-        '<text x="50%" y="43%" font-family="Georgia, \'Times New Roman\', serif" font-style="italic" font-size="30" fill="#2A2321" fill-opacity=".55" text-anchor="middle" dominant-baseline="middle">O &amp; R</text>' +
-        '<text x="50%" y="54%" font-family="Georgia, serif" font-size="15" letter-spacing="2" fill="#2A2321" fill-opacity=".4" text-anchor="middle" dominant-baseline="middle">' + label.toUpperCase() + '</text>' +
+        '<circle cx="50%" cy="42%" r="46" fill="none" stroke="#220810" stroke-opacity=".18" stroke-width="1.4"/>' +
+        '<text x="50%" y="43%" font-family="Georgia, \'Times New Roman\', serif" font-style="italic" font-size="30" fill="#220810" fill-opacity=".55" text-anchor="middle" dominant-baseline="middle">O &amp; R</text>' +
+        '<text x="50%" y="54%" font-family="Georgia, serif" font-size="15" letter-spacing="2" fill="#220810" fill-opacity=".4" text-anchor="middle" dominant-baseline="middle">' + label.toUpperCase() + '</text>' +
       '</svg>';
     return 'data:image/svg+xml,' + encodeURIComponent(svg);
   }

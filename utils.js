@@ -44,7 +44,7 @@
 
   // Deterministic palette color from a name — the same guest
   // always gets the same avatar tint without storing one.
-  var AVATAR_PALETTE = ['#C6867C', '#B08D57', '#9CAA8C', '#7C93A8', '#B98CA6', '#A8845A'];
+  var AVATAR_PALETTE = ['#8A2540', '#641B31', '#A23F55', '#3D0F1C', '#B0596C', '#551C30'];
   function colorForName(name){
     var str = String(name || '');
     var hash = 0;
