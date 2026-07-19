@@ -20,28 +20,7 @@
     <div class="pre-mono">A &amp; I</div>
   </div>
 
-  <div id="envelope-wrapper">
-    <div class="envelope-glow" aria-hidden="true"></div>
-    <div class="envelope-particles" aria-hidden="true"></div>
-    <div id="envelope-container">
-      <div class="envelope">
-        <div class="envelope-body"></div>
-        <div class="envelope-flap"></div>
-        <div class="wax-seal" aria-hidden="true">A &amp; I</div>
-        <div class="envelope-letter">
-          <div class="letter-content">
-            <span class="letter-ornament">❖</span>
-            <strong>Alexandar &amp; Isabella</strong>
-            <span class="letter-subtext">Open Your Invitation</span>
-          </div>
-        </div>
-      </div>
-      <button id="open-btn">
-        <span class="btn-icon">✉</span>
-        <span class="btn-text">Open Invitation</span>
-      </button>
-    </div>
-  </div>
+
 
   <!-- ============ SITE NAV ============ -->
   <nav id="site-nav" aria-label="Site">
@@ -199,7 +178,7 @@
 
         <div class="field">
           <label for="r-msg">Message to the Couple</label>
-          <textarea id="r-msg" placeholder="Leave Omar &amp; Rowan a note..."></textarea>
+          <textarea id="r-msg" placeholder="Leave Alexandar &amp; Isabella a note..."></textarea>
         </div>
 
         <button type="submit" class="btn rsvp-submit">Send RSVP</button>
@@ -230,7 +209,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
     <figure class="lightbox-figure">
-      <img id="lightbox-img" src="" alt="">
+      <img id="lightbox-img" alt="">
       <figcaption class="lightbox-caption" id="lightbox-caption"></figcaption>
     </figure>
     <button class="lightbox-btn" id="lightbox-next" aria-label="Next photo">
@@ -247,6 +226,15 @@
     </div>
   </div>
 
+<script>
+window.ENVELOPE_CONFIG = {
+  groomName: "Alexandar",
+  brideName: "Isabella",
+  displayDate: "October 31, 2026",
+  initials: "A&I",
+  theme: "bloom"
+};
+</script>
 <script src="utils.js"></script>
 <script src="weddingData.js"></script>
 <script src="script.js"></script>

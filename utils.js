@@ -99,6 +99,44 @@
     }
   }
 
+  /* -----------------------------------------------------
+     STORAGE SHIM
+     script.js and messages.js talk to a promise-based
+     window.storage API (set/get/list). When no host
+     platform provides one, back it with localStorage so
+     RSVPs actually persist and appear on the messages
+     page and in the couple's admin view.
+     ----------------------------------------------------- */
+  if (!window.storage) {
+    window.storage = {
+      set: function(key, value){
+        return new Promise(function(resolve){
+          try { localStorage.setItem(key, value); resolve({ key: key }); }
+          catch (e) { resolve(null); } // private mode / quota — degrade quietly
+        });
+      },
+      get: function(key){
+        return new Promise(function(resolve){
+          var v = null;
+          try { v = localStorage.getItem(key); } catch (e) {}
+          resolve(v === null ? null : { key: key, value: v });
+        });
+      },
+      list: function(prefix){
+        return new Promise(function(resolve){
+          var keys = [];
+          try {
+            for (var i = 0; i < localStorage.length; i++){
+              var k = localStorage.key(i);
+              if (!prefix || k.indexOf(prefix) === 0) keys.push(k);
+            }
+          } catch (e) {}
+          resolve({ keys: keys });
+        });
+      }
+    };
+  }
+
   window.WeddingUtils = {
     escapeHtml: escapeHtml,
     formatDate: formatDate,

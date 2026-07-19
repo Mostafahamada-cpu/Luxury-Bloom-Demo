@@ -11,7 +11,7 @@
      or an uploaded file path, e.g.:
 
        { src: "photos/ceremony-01.jpg", full: "photos/ceremony-01-large.jpg",
-         alt: "Omar and Rowan exchanging vows", caption: "Walking the Aisle" }
+         alt: "Alexandar and Isabella exchanging vows", caption: "Walking the Aisle" }
 
      Until you do, `src`/`full` are left blank below and the
      gallery fills them in with soft generated artwork in the
@@ -38,7 +38,7 @@
         '</linearGradient></defs>' +
         '<rect width="100%" height="100%" fill="url(#g' + seed + ')"/>' +
         '<circle cx="50%" cy="42%" r="46" fill="none" stroke="#220810" stroke-opacity=".18" stroke-width="1.4"/>' +
-        '<text x="50%" y="43%" font-family="Georgia, \'Times New Roman\', serif" font-style="italic" font-size="30" fill="#220810" fill-opacity=".55" text-anchor="middle" dominant-baseline="middle">O &amp; R</text>' +
+        '<text x="50%" y="43%" font-family="Georgia, \'Times New Roman\', serif" font-style="italic" font-size="30" fill="#220810" fill-opacity=".55" text-anchor="middle" dominant-baseline="middle">A &amp; I</text>' +
         '<text x="50%" y="54%" font-family="Georgia, serif" font-size="15" letter-spacing="2" fill="#220810" fill-opacity=".4" text-anchor="middle" dominant-baseline="middle">' + label.toUpperCase() + '</text>' +
       '</svg>';
     return 'data:image/svg+xml,' + encodeURIComponent(svg);
@@ -54,10 +54,10 @@
     ['First Dance', 'Just the two of them, for a minute'],
     ['Stolen Glances', 'The look that started it all'],
     ['Golden Hour', 'La Beau Garden at its softest light'],
-    ['Sharp & Ready', 'Omar, moments before it began'],
+    ['Sharp & Ready', 'Alexandar, moments before it began'],
     ['The Little Details', 'Everything chosen with care'],
     ['Sweetness Ahead', 'Saved for the reception'],
-    ['Raise a Glass', 'To Omar and Rowan'],
+    ['Raise a Glass', 'To Alexandar and Isabella'],
     ['Confetti & Cheers', 'The room erupts'],
     ['Evening Light', 'As the garden lit up for the night'],
     ['One Last Twirl', 'Closing out the night together']

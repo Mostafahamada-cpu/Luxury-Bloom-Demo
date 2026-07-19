@@ -4,96 +4,17 @@
      EDIT ME — quick personalization points
      ===================================================== */
   var SPOTIFY_TRACK_URL = "https://open.spotify.com/track/5k4lqXHUPP36MAaFkvBck9?si=1085254f42b6479c";           // paste a Spotify track/playlist share link here, e.g. "https://open.spotify.com/track/XXXXXXXX"
-  var WEDDING_DATE = new Date(2026, 9, 7, 18, 0, 0); // Oct 7, 2026, 6:00 PM (change the "18" if the ceremony time differs)
-  var ADMIN_PASSPHRASE = "omarrowan2026"; // couple-only passphrase to view RSVPs
+  var WEDDING_DATE = new Date(2026, 9, 31, 18, 0, 0); // Oct 31, 2026, 6:00 PM (change the "18" if the ceremony time differs)
+  var ADMIN_PASSPHRASE = "alexandarisabella2026"; // couple-only passphrase to view RSVPs
 
   var U = window.WeddingUtils || {};
+  var reducedMotion = U.prefersReducedMotion ? U.prefersReducedMotion() : false;
 
   /* ============ PRELOADER ============ */
   if (U.initPreloader) U.initPreloader(1700);
 
-  /* ============ ENVELOPE INTRO ============ */
-  var ENVELOPE_SESSION_KEY = 'omarRowanEnvelopeOpened';
-  var reducedMotion = U.prefersReducedMotion ? U.prefersReducedMotion() : false;
-  var envelopeOpened = false;
-  var envelopeWrapper = document.getElementById('envelope-wrapper');
-  var envelopeContainer = document.querySelector('.envelope');
-  var openEnvelopeBtn = document.getElementById('open-btn');
+  /* ============ ENVELOPE INTRO (Removed - Now using shared component) ============ */
 
-  var alreadyOpenedThisSession = false;
-  try { alreadyOpenedThisSession = sessionStorage.getItem(ENVELOPE_SESSION_KEY) === '1'; }
-  catch (e) { alreadyOpenedThisSession = false; } // storage unavailable (e.g. private browsing) — just show it every time
-
-  if (alreadyOpenedThisSession && envelopeWrapper){
-    envelopeWrapper.classList.add('skip-envelope');
-  }
-
-  function markEnvelopeOpened(){
-    try { sessionStorage.setItem(ENVELOPE_SESSION_KEY, '1'); } catch (e) { /* ignore */ }
-  }
-
-  function openEnvelope(){
-    if (envelopeOpened || alreadyOpenedThisSession) return;
-    envelopeOpened = true;
-    markEnvelopeOpened();
-    if (envelopeContainer) envelopeContainer.classList.add('open');
-    if (openEnvelopeBtn){
-      openEnvelopeBtn.style.opacity = '0';
-      openEnvelopeBtn.style.transform = 'translateY(10px)';
-      openEnvelopeBtn.style.pointerEvents = 'none';
-    }
-    var revealDelay = reducedMotion ? 150 : 1900;
-    var fadeDuration = reducedMotion ? 120 : 680;
-    setTimeout(function(){
-      if (envelopeWrapper) envelopeWrapper.classList.add('fade-out');
-      setTimeout(function(){
-        if (envelopeWrapper) envelopeWrapper.style.display = 'none';
-      }, fadeDuration);
-    }, revealDelay);
-  }
-  if (openEnvelopeBtn) openEnvelopeBtn.addEventListener('click', openEnvelope);
-  if (envelopeContainer) envelopeContainer.addEventListener('click', openEnvelope);
-
-  // Floating dust motes + gold sparkles — skipped for returning-this-session
-  // visitors and for anyone who prefers reduced motion.
-  (function spawnEnvelopeParticles(){
-    if (!envelopeWrapper || alreadyOpenedThisSession || reducedMotion) return;
-    var host = envelopeWrapper.querySelector('.envelope-particles');
-    if (!host) return;
-    var MOTES = 10, SPARKS = 7, i, j, m, s, size;
-    for (i = 0; i < MOTES; i++){
-      m = document.createElement('span');
-      m.className = 'dust-mote';
-      size = 2 + Math.random() * 3;
-      m.style.width = size + 'px';
-      m.style.height = size + 'px';
-      m.style.left = (Math.random() * 100) + '%';
-      m.style.top = (40 + Math.random() * 50) + '%';
-      m.style.animationDuration = (6 + Math.random() * 6) + 's';
-      m.style.animationDelay = (Math.random() * 6) + 's';
-      host.appendChild(m);
-    }
-    for (j = 0; j < SPARKS; j++){
-      s = document.createElement('span');
-      s.className = 'spark';
-      s.style.left = (Math.random() * 100) + '%';
-      s.style.top = (Math.random() * 100) + '%';
-      s.style.animationDuration = (2 + Math.random() * 2.2) + 's';
-      s.style.animationDelay = (Math.random() * 3) + 's';
-      host.appendChild(s);
-    }
-  })();
-
-  // Wax seal monogram, generated from the names already in the hero heading
-  // rather than hardcoded, so this stays correct if the couple's names change.
-  (function setSealInitials(){
-    var seal = document.querySelector('.wax-seal');
-    var heading = document.querySelector('.hero-names');
-    if (!seal || !heading) return;
-    var names = heading.textContent.split('&').map(function(s){ return s.trim(); }).filter(Boolean);
-    if (names.length < 2) return;
-    seal.textContent = names[0].charAt(0).toUpperCase() + ' & ' + names[1].charAt(0).toUpperCase();
-  })();
 
   /* ============ SCROLL REVEAL ============ */
   if (U.initScrollReveal) U.initScrollReveal();
@@ -187,7 +108,7 @@
     grid.innerHTML = items.map(function(item, i){
       var alt = U.escapeHtml ? U.escapeHtml(item.alt || '') : (item.alt || '');
       var caption = item.caption ? '<figcaption class="gal-caption">' + (U.escapeHtml ? U.escapeHtml(item.caption) : item.caption) + '</figcaption>' : '';
-      return '<figure class="gal-card" data-index="' + i + '">' +
+      return '<figure class="gal-card" data-index="' + i + '" tabindex="0" role="button" aria-label="View photo: ' + alt + '">' +
         '<img src="' + item.src + '" alt="' + alt + '" loading="lazy" decoding="async">' +
         caption +
       '</figure>';
@@ -237,6 +158,12 @@
       card.addEventListener('click', function(){
         showLightbox(parseInt(card.getAttribute('data-index'), 10));
       });
+      card.addEventListener('keydown', function(e){
+        if (e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          showLightbox(parseInt(card.getAttribute('data-index'), 10));
+        }
+      });
     });
     if (lbClose) lbClose.addEventListener('click', hideLightbox);
     if (lbPrev) lbPrev.addEventListener('click', function(){ showLightbox(currentIndex - 1); });
@@ -272,12 +199,11 @@
     var name = document.getElementById('r-name').value.trim();
     if (!name) return;
 
+    var attendingInput = form.querySelector('input[name="attending"]:checked');
     var data = {
       name: name,
-      attending: form.querySelector('input[name="attending"]:checked').value,
+      attending: attendingInput ? attendingInput.value : 'Joyfully Accepts',
       guests: document.getElementById('r-guests').value,
-      meal: document.getElementById('r-meal').value,
-      song: document.getElementById('r-song').value.trim(),
       message: document.getElementById('r-msg').value.trim(),
       timestamp: new Date().toISOString()
     };
@@ -349,9 +275,8 @@
         adminList.innerHTML = entries.map(function(e){
           var esc = U.escapeHtml || function(s){ return s; };
           return '<div class="admin-row"><b>' + esc(e.name) + ' — ' + esc(e.attending) + '</b>' +
-            '<span>Guests: ' + esc(String(e.guests)) + ' &middot; Meal: ' + esc(e.meal) +
-            (e.song ? ' &middot; Song: ' + esc(e.song) : '') + '</span>' +
-            (e.message ? '<div style="margin-top:6px; font-style:italic;">' + esc(e.message) + '</div>' : '') +
+            '<span>Guests: ' + esc(String(e.guests)) + '</span>' +
+            (e.message ? '<div class="admin-note">' + esc(e.message) + '</div>' : '') +
             '</div>';
         }).join('');
       });
@@ -361,4 +286,299 @@
     });
   });
 
+})();
+/* =============================================================================
+   ENVELOPE OPENING EXPERIENCE (inlined component)
+   Injects the envelope overlay, runs the opening sequence, then reveals the
+   page. Dependency-free.
+
+   - Reads window.ENVELOPE_CONFIG { groomName, brideName, displayDate,
+     initials, hideSeal, theme, sounds: { seal, flap, unfold } }.
+   - Exposes window.WS.initEnvelope(onDone) for templates that orchestrate the
+     hand-off themselves. Returns true if the envelope takes over, false if
+     skipped (reduced motion / already seen this session) so the caller can
+     reveal directly.
+   - Auto-runs only on pages that define ENVELOPE_CONFIG: immediately on
+     DOMContentLoaded when there is no #preloader, otherwise once the
+     preloader hides.
+   - On completion: unhides #invitation (if present), dispatches
+     "envelope:opened" on document, and invokes any registered callbacks.
+   ============================================================================= */
+(function () {
+  "use strict";
+
+  var SEEN_KEY = "envlp-seen";
+  var initialized = false;
+  var finished = false;
+  var callbacks = [];
+  var overlay = null;
+
+  /* ---------------------------------------------------------------- helpers */
+
+  function getConfig() {
+    var c = window.ENVELOPE_CONFIG || {};
+    return {
+      groom: c.groomName || "",
+      bride: c.brideName || "",
+      date: c.displayDate || "",
+      initials: c.initials || "",
+      hideSeal: !!c.hideSeal,
+      theme: /^[a-z][a-z-]*$/.test(c.theme || "") ? c.theme : "",
+      sounds: c.sounds || c.envelopeSounds || {}
+    };
+  }
+
+  function prefersReducedMotion() {
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+
+  function seenThisSession() {
+    try { return sessionStorage.getItem(SEEN_KEY) === "1"; } catch (e) { return false; }
+  }
+
+  function markSeen() {
+    try { sessionStorage.setItem(SEEN_KEY, "1"); } catch (e) { /* private mode */ }
+  }
+
+  function playSound(src) {
+    if (!src) { return; }
+    try {
+      var a = new Audio(src);
+      a.volume = 0.55;
+      var p = a.play();
+      if (p && p.catch) { p.catch(function () {}); }
+    } catch (e) { /* autoplay blocked or bad src — silent */ }
+  }
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) { node.className = className; }
+    if (text) { node.textContent = text; }
+    return node;
+  }
+
+  /* ------------------------------------------------------------- completion */
+
+  function revealSite() {
+    if (finished) { return; }
+    finished = true;
+    markSeen();
+
+    var main = document.getElementById("invitation");
+    if (main) { main.classList.remove("hidden"); }
+
+    var evt;
+    try {
+      evt = new CustomEvent("envelope:opened");
+    } catch (e) {
+      evt = document.createEvent("Event");
+      evt.initEvent("envelope:opened", true, true);
+    }
+    document.dispatchEvent(evt);
+
+    for (var i = 0; i < callbacks.length; i++) {
+      try { callbacks[i](); } catch (err) { console.error("[envelope] onDone callback failed:", err); }
+    }
+    callbacks = [];
+  }
+
+  /* ------------------------------------------------------------------ build */
+
+  function buildOverlay(cfg) {
+    var root = el("div", "envlp-overlay");
+    if (cfg.theme) { root.classList.add("envlp-theme-" + cfg.theme); }
+    root.appendChild(el("div", "envlp-vignette"));
+
+    var stage = el("div", "envlp-stage");
+    var scene = el("div", "envlp-scene");
+
+    var env = el("div", "envlp");
+    env.setAttribute("role", "button");
+    env.setAttribute("tabindex", "0");
+    env.setAttribute("aria-label", "Open the wedding invitation");
+
+    env.appendChild(el("div", "envlp-back"));
+
+    /* Letter card */
+    var letter = el("div", "envlp-letter");
+    var inner = el("div", "envlp-letter-inner");
+    inner.appendChild(el("p", "envlp-kicker", "Together with their families"));
+
+    var names = el("h1", "envlp-names");
+    names.appendChild(el("span", null, cfg.groom));
+    names.appendChild(el("span", "envlp-amp", "&"));
+    names.appendChild(el("span", null, cfg.bride));
+    inner.appendChild(names);
+
+    var rule = el("div", "envlp-rule");
+    rule.appendChild(el("span"));
+    rule.appendChild(el("i"));
+    rule.appendChild(el("span"));
+    inner.appendChild(rule);
+
+    if (cfg.date) { inner.appendChild(el("p", "envlp-date", cfg.date)); }
+    inner.appendChild(el("p", "envlp-line", "request the honour of your presence"));
+    letter.appendChild(inner);
+    env.appendChild(letter);
+
+    /* Pocket folds */
+    var pocket = el("div", "envlp-pocket");
+    pocket.appendChild(el("div", "envlp-fold envlp-fold-left"));
+    pocket.appendChild(el("div", "envlp-fold envlp-fold-right"));
+    pocket.appendChild(el("div", "envlp-fold envlp-fold-bottom"));
+    env.appendChild(pocket);
+
+    env.appendChild(el("div", "envlp-flap"));
+
+    if (cfg.hideSeal) {
+      if (cfg.initials) { env.appendChild(el("div", "envlp-monogram", cfg.initials)); }
+    } else {
+      env.appendChild(el("div", "envlp-seal", cfg.initials));
+    }
+
+    scene.appendChild(env);
+    stage.appendChild(scene);
+    stage.appendChild(el("p", "envlp-hint", "Tap to open your invitation"));
+    root.appendChild(stage);
+
+    return { root: root, env: env };
+  }
+
+  /* --------------------------------------------------------------- sequence */
+
+  function open(cfg) {
+    if (overlay.classList.contains("is-opening")) { return; }
+    overlay.classList.add("is-opening");
+
+    var env = overlay.querySelector(".envlp");
+    var hasSeal = !cfg.hideSeal && !!cfg.initials;
+    var t = 0;
+
+    if (hasSeal) {
+      env.classList.add("stage-seal");
+      playSound(cfg.sounds.seal);
+      t += 450;
+    } else {
+      env.classList.add("stage-seal"); /* fades the monogram */
+    }
+
+    setTimeout(function () {
+      env.classList.add("stage-flap");
+      playSound(cfg.sounds.flap);
+    }, t);
+
+    setTimeout(function () {
+      env.classList.add("stage-letter");
+      playSound(cfg.sounds.unfold);
+    }, t + 950);
+
+    setTimeout(function () {
+      env.classList.add("stage-card");
+    }, t + 1950);
+
+    /* Hold the card, then fade the overlay and reveal the site */
+    setTimeout(function () {
+      overlay.classList.add("is-leaving");
+      revealSite();
+    }, t + 3600);
+
+    setTimeout(function () {
+      if (overlay && overlay.parentNode) { overlay.parentNode.removeChild(overlay); }
+      overlay = null;
+    }, t + 4600);
+  }
+
+  function start() {
+    if (initialized) { return true; }
+    initialized = true;
+
+    var cfg = getConfig();
+    var built = buildOverlay(cfg);
+    overlay = built.root;
+    document.body.appendChild(overlay);
+
+    var trigger = function () { open(cfg); };
+    built.env.addEventListener("click", trigger);
+    built.env.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " " || e.keyCode === 13 || e.keyCode === 32) {
+        e.preventDefault();
+        trigger();
+      }
+    });
+    try { built.env.focus({ preventScroll: true }); } catch (e) { /* older browsers */ }
+    return true;
+  }
+
+  /* ------------------------------------------------------------- public API */
+
+  window.WS = window.WS || {};
+  window.WS.initEnvelope = function (onDone) {
+    /* Decline before registering the callback: when we return false the
+       caller reveals the page itself, and holding its callback too would
+       fire the reveal twice once autoStart() settles. */
+    if (!initialized && (prefersReducedMotion() || seenThisSession())) { return false; }
+    if (typeof onDone === "function") {
+      if (finished) { onDone(); } else { callbacks.push(onDone); }
+    }
+    if (initialized) { return true; }
+    return start();
+  };
+
+  /* -------------------------------------------------------------- auto-init */
+
+  function autoStart() {
+    if (initialized || finished) { return; }
+    if (prefersReducedMotion() || seenThisSession()) {
+      revealSite();
+      return;
+    }
+    start();
+  }
+
+  function watchPreloader(pre) {
+    var done = false;
+    var kick = function () {
+      if (done) { return; }
+      done = true;
+      /* Small beat so the preloader's fade-out and the envelope don't fight */
+      setTimeout(autoStart, 150);
+    };
+
+    var isHidden = function () {
+      return pre.classList.contains("hide") ||
+             pre.classList.contains("is-hidden") ||
+             pre.getAttribute("aria-hidden") === "true" ||
+             getComputedStyle(pre).display === "none" ||
+             getComputedStyle(pre).opacity === "0";
+    };
+
+    if (isHidden()) { kick(); return; }
+
+    if (window.MutationObserver) {
+      var mo = new MutationObserver(function () {
+        if (isHidden()) { mo.disconnect(); kick(); }
+      });
+      mo.observe(pre, { attributes: true, attributeFilter: ["class", "style", "aria-hidden"] });
+    }
+    /* Safety net: never leave the page stuck behind a wedged preloader */
+    setTimeout(kick, 8000);
+  }
+
+  function boot() {
+    /* Only auto-run on pages that configure the envelope — secondary pages
+       (guest messages) share this bundle but must never show it. */
+    if (!window.ENVELOPE_CONFIG) { return; }
+    var pre = document.getElementById("preloader");
+    if (pre) {
+      watchPreloader(pre);
+    } else {
+      autoStart();
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
 })();
